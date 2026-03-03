@@ -4,9 +4,8 @@ import (
 	"context"
 	"sync"
 
-	"movieapp.com/metadata/internal/repository"
-	"movieapp.com/metadata/pkg/model"
-	model "movieexample.com/metadata/pkg"
+	"movieexample.com/metadata/internal/repository"
+	"movieexample.com/metadata/pkg"
 )
 
 // Repository defines a memory movie metadata Repository
@@ -21,10 +20,10 @@ func New() *Repository {
 }
 
 // Get returns a movie metadata by movie id
-func (*r Repository) Get(_ context.Context, id string) (*model.Metadata, error) {
+func (r *Repository) Get(_ context.Context, id string) (*model.Metadata, error) {
 	r.RLock()
-	defer r.Unlock()
-	m, ok := data[id]
+	defer r.RUnlock()
+	m, ok := r.data[id]
 	if !ok {
 		return nil, repository.ErrNotFound
 	}
@@ -32,7 +31,7 @@ func (*r Repository) Get(_ context.Context, id string) (*model.Metadata, error) 
 }
 
 // Puts a movie metadata in the repository
-func (*r Repository) Put(_ context.Context, id string, metadata *model.Metadata) error {
+func (r *Repository) Put(_ context.Context, id string, metadata *model.Metadata) error {
 	r.Lock()
 	defer r.Unlock()
 	r.data[id] = metadata

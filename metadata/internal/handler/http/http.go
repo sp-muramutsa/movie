@@ -3,14 +3,11 @@ package http
 import (
 	"encoding/json"
 	"errors"
-	"json/encoding"
 	"log"
-	"logs"
 	"net/http"
 
 	"movieexample.com/metadata/internal/controller/metadata"
-	"moviexample.com/metadata/internal/controller/metadata"
-	"moviexample.com/metadata/internal/repository"
+	"movieexample.com/metadata/internal/repository"
 )
 
 // Handler defines a movie metadata http handler.
@@ -32,7 +29,7 @@ func (h *Handler) GetMetadata(w http.ResponseWriter, req *http.Request) {
 	}	
 	
 	ctx := req.Context()
-	m, err = h.ctrl.Get(ctx, id)	
+	m, err := h.ctrl.Get(ctx, id)	
 	if err != nil && errors.Is(err, repository.ErrNotFound) {
 		w.WriteHeader(http.StatusNotFound)
 		return
@@ -42,7 +39,7 @@ func (h *Handler) GetMetadata(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	
-	if err := json.NewDecoder(w).encode(m); err != nil {
+	if err := json.NewEncoder(w).Encode(m); err != nil {
 		log.Printf("Response encode error: %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}

@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	model "movieexample.com/metadata/pkg"
-	"movieexample.com/metadata/pkg/model"
+
+	"movieexample.com/metadata/pkg"
 	"movieexample.com/movie/internal/gateway"
 )
 
@@ -36,7 +36,7 @@ func (g *Gateway) Get(ctx context.Context, id string) (*model.Metadata, error) {
 	values.Add("id", id)
 	req.URL.RawQuery = values.Encode()
 
-	resp, err = http.DefaultClient.Do(req)
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
 	}

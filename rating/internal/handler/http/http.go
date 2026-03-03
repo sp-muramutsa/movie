@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"movieexample.com/rating/internal/controller"
-	"movieexample.com/rating/pkg/model"
+	"movieexample.com/rating/internal/controller/rating"
+	"movieexample.com/rating/pkg"
 )
 
 type Handler struct {
@@ -17,7 +17,7 @@ type Handler struct {
 
 // New creates a new ratings service HTTP handler.
 func New(ctrl *rating.Controller) *Handler {
-	return &Handler(ctrl)
+	return &Handler{ctrl}
 }
 
 // Handle handles PUT and GET /rating requests
@@ -37,7 +37,7 @@ func (h *Handler) Handle(w http.ResponseWriter, req *http.Request) {
 	switch req.Method {
 	case http.MethodGet:
 		v, err := h.ctrl.GetAggregatedRating(req.Context(), recordID, recordType)
-		if err != nil && erros.Is(err, rating.ErrNotFound) {
+		if err != nil && errors.Is(err, rating.ErrNotFound) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}

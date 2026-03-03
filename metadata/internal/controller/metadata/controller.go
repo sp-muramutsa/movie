@@ -4,9 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"movieexample/metadata/internal/repository"
-	"movieexample/metadata/pkg/model"
-
+	"movieexample.com/metadata/internal/repository"
 	model "movieexample.com/metadata/pkg"
 )
 
@@ -23,12 +21,12 @@ type Controller struct {
 }
 
 // New createds a metadata service controller.
-func New(*repo metadataRepository) *Controller {
+func New(repo metadataRepository) *Controller {
 	return &Controller{repo}
 }
 
 // Get returns a movie metadata by id
-func (*c Controller) Get(ctx context.Context, id string) (*model.Metadata, error) {
+func (c *Controller) Get(ctx context.Context, id string) (*model.Metadata, error) {
 	movie, err := c.repo.Get(ctx, id)
 	if err != nil && errors.Is(err, repository.ErrNotFound) {
 		return nil, ErrNotFound
