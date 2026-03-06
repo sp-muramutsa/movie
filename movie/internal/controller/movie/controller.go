@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	metadatamodel "movieexample.com/metadata/pkg"
+	metadatamodel "movieexample.com/metadata/pkg/model"
 	"movieexample.com/movie/internal/gateway"
 	"movieexample.com/movie/pkg"
 	ratingmodel "movieexample.com/rating/pkg"

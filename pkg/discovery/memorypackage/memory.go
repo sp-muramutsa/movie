@@ -17,7 +17,7 @@ type Registry struct {
 }
 
 type serviceInstance struct {
-	hostPort string
+	hostPort   string
 	lastActive time.Time
 }
 
@@ -27,7 +27,7 @@ func NewRegistry() *Registry {
 }
 
 // Register creates a service record in the registry
-func (r *Registry) Registry(ctx context.Context, instanceID string, serviceName string, hostPort string) error {
+func (r *Registry) Register(ctx context.Context, instanceID string, serviceName string, hostPort string) error {
 	r.Lock()
 	defer r.Unlock()
 
@@ -43,7 +43,7 @@ func (r *Registry) Deregister(ctx context.Context, instanceID string, serviceNam
 	r.Lock()
 	defer r.Unlock()
 
-	if _, ok := r.serviceAddrs[serviceName]; ok {
+	if _, ok := r.serviceAddrs[serviceName]; !ok {
 		return nil
 	}
 	delete(r.serviceAddrs[serviceName], instanceID)
@@ -74,7 +74,7 @@ func (r *Registry) ServiceAddresses(ctx context.Context, serviceName string) ([]
 	if len(r.serviceAddrs[serviceName]) == 0 {
 		return nil, discovery.ErrNotFound
 	}
-	var res[]string
+	var res []string
 
 	for instanceID, i := range r.serviceAddrs[serviceName] {
 		if i.lastActive.Before(time.Now().Add(-5 * time.Second)) {

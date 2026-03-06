@@ -1,7 +1,7 @@
 package model
 
 import (
-	model "movieexample.com/metadata/pkg"
+	model "movieexample.com/metadata/pkg/model"
 )
 
 // MovieDetails includes movie metadata and its aggregated rating.

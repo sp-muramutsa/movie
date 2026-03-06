@@ -2,53 +2,41 @@ package main
 
 import (
 	"context"
-	"flag"
-	"fmt"
 	"log"
-	"net/http"
-	"time"
+	"net"
 
-	"movieexample.com/pkg/discovery"
-	"movieexample.com/pkg/discovery/consul"
-	"movieexample.com/rating/internal/controller/rating"
-	httphandler "movieexample.com/rating/internal/handler/http"
+	"google.golang.org/grpc"
+	"movieexample.com/gen"
+	controller "movieexample.com/rating/internal/controller/rating"
+	grpchandler "movieexample.com/rating/internal/handler/grpc"
+	"movieexample.com/rating/internal/ingester/kafka"
 	"movieexample.com/rating/internal/repository/memory"
 )
 
-const serviceName = "rating"
-
 func main() {
-	var port int
-	flag.IntVar(&port, "port", 8082, "API handler port")
-	flag.Parse()
-	log.Printf("Starting the rating server on port %d", port)
-
-	registry, err := consul.NewRegistry("localhost:8500") 
-	if err != nil {
-		panic(err)
-	}
-
-	ctx := context.Background()
-	instanceID := discovery.GenerateInstanceID(serviceName)
-	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("localhost:%d", port)); err != nil {
-		panic(err)
-	}
-
-	go func() {
-		for {
-			if err := registry.ReportHealthyState(instanceID, serviceName); err != nil {
-				log.Println("Failed to report healthy state: ", err.Error())
-			}
-			time.Sleep(1 * time.Second)
-		}
-	}()
-	defer registry.Deregister(ctx, instanceID, serviceName)
-	
+	log.Println("Starting the rating service")
 	repo := memory.New()
-	ctrl := rating.New(repo)
-	h := httphandler.New(ctrl)
-	http.Handle("/rating", http.HandlerFunc(h.Handle))
-	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
+
+	ingester, err := kafka.NewIngester("localhost", "rating", "ratings")
+	if err != nil {
+		log.Fatalf("failed to intialize ingester: %v", err)
+	}
+
+	ctrl := controller.New(repo, ingester)
+	h := grpchandler.New(ctrl)
+	
+	ctx := context.Background()
+	if err := ctrl.StartIngestion(ctx); err != nil {
+		log.Fatalf("failed to start ingestion: %v", err)
+	}
+
+	lis, err := net.Listen("tcp", "localhost:8082")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	srv := grpc.NewServer()
+	gen.RegisterRatingServiceServer(srv, h)
+	if err := srv.Serve(lis); err != nil {
 		panic(err)
 	}
 }
