@@ -67,7 +67,7 @@ func (c *Controller) StartIngestion(ctx context.Context) error {
 	for e := range ch {
 		fmt.Printf("Consumed a messsage: %v\n", e)
 		if err := c.PutRating(ctx, model.RecordID(e.RecordID), model.RecordType(e.RecordType), &model.Rating{UserID: e.UserID, Value: e.Value}); err != nil {
-			return errors.ErrUnsupported
+			return err
 		}
 	}
 	return err

@@ -25,7 +25,7 @@ func New(ctrl *rating.Controller) *Handler {
 }
 // GetAggregatedRating returns the aggregated rating for a record.
 func (h *Handler) GetAggregatedRating(ctx context.Context, req *gen.GetAggregatedRatingRequest) (*gen.GetAggregatedRatingResponse, error) {
-	if req == nil || req.RecordId == "" || req.RecordType == 0 {
+	if req == nil || req.RecordId == "" || req.RecordType == "" {
 		return nil, status.Errorf(codes.InvalidArgument, "nil req or empty id/type")
 	}
 
@@ -41,7 +41,7 @@ func (h *Handler) GetAggregatedRating(ctx context.Context, req *gen.GetAggregate
 
 // PutRating writes a rating for a given record.
 func (h *Handler) PutRating(ctx context.Context, req *gen.PutRatingRequest) (*gen.PutRatingResponse, error) {
-	if req == nil || req.RecordId == "" || req.RecordType == 0 {
+	if req == nil || req.RecordId == "" || req.RecordType == "" {
 		return nil, status.Errorf(codes.InvalidArgument, "nil req or empty user id or record id")
 	}
 
