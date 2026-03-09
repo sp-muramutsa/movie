@@ -29,15 +29,8 @@ func (g *Gateway) GetAggregatedRating(ctx context.Context, recordID model.Record
 	defer conn.Close()
 
 	client := gen.NewRatingServiceClient(conn)
-	var rt int32
-	switch recordType {
-	case model.RecordTypeMovie:
-		rt = 1
-	default:
-		rt = 0
-	}
 
-	resp, err := client.GetAggregatedRating(ctx, &gen.GetAggregatedRatingRequest{RecordId: string(recordID), RecordType: rt})
+	resp, err := client.GetAggregatedRating(ctx, &gen.GetAggregatedRatingRequest{RecordId: string(recordID), RecordType: string(recordType)})
 	if err != nil {
 		return 0, err
 	}

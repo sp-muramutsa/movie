@@ -3,14 +3,17 @@ module movieexample.com
 go 1.25.7
 
 require (
+	github.com/IBM/sarama v1.47.0
+	github.com/confluentinc/confluent-kafka-go v1.9.2
 	github.com/hashicorp/consul/api v1.33.4
+	github.com/lib/pq v1.11.2
+	google.golang.org/grpc v1.64.0
 	google.golang.org/protobuf v1.36.11
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
-	github.com/IBM/sarama v1.47.0 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
-	github.com/confluentinc/confluent-kafka-go v1.9.2 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/eapache/go-resiliency v1.7.0 // indirect
 	github.com/eapache/queue v1.1.0 // indirect
@@ -31,7 +34,6 @@ require (
 	github.com/jcmturner/gokrb5/v8 v8.4.4 // indirect
 	github.com/jcmturner/rpc/v2 v2.0.3 // indirect
 	github.com/klauspost/compress v1.18.4 // indirect
-	github.com/lib/pq v1.11.2 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
@@ -43,5 +45,4 @@ require (
 	golang.org/x/sys v0.41.0 // indirect
 	golang.org/x/text v0.34.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240318140521-94a12d6c2237 // indirect
-	google.golang.org/grpc v1.64.0 // indirect
 )

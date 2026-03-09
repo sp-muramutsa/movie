@@ -8,7 +8,7 @@ import (
 	"math/rand"
 	"net/http"
 
-	"movieexample.com/metadata/pkg"
+	"movieexample.com/metadata/pkg/model"
 	"movieexample.com/movie/internal/gateway"
 	"movieexample.com/pkg/discovery"
 )
