@@ -14,7 +14,6 @@ import (
 	memory "movieexample.com/metadata/internal/repository/memory"
 )
 
-
 func main() {
 	log.Println("Starting the movie metadata service")
 	f, err := os.Open("../configs/default.yaml")
@@ -22,7 +21,7 @@ func main() {
 		panic(err)
 	}
 	defer f.Close()
-	
+
 	var cfg config
 	if err := yaml.NewDecoder(f).Decode(&cfg); err != nil {
 		panic(err)
@@ -32,8 +31,8 @@ func main() {
 	cache := memory.New()
 	svc := metadata.New(repo, cache)
 	h := grpchandler.New(svc)
-	
-	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", cfg.API.Port))
+
+	lis, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", cfg.API.Port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}

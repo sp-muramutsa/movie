@@ -2,4 +2,6 @@ api:
   port: 8082
 serviceDiscovery:
   consul:
-    address: http://consul-server.consul.svc.cluster.local:8500
+    address: consul:8500
+  kafka:
+    address: kafka:9092

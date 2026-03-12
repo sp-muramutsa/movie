@@ -44,7 +44,11 @@ func main() {
 	}
 
 	instanceID := discovery.GenerateInstanceID(serviceName)
-	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("localhost:%d", port)); err != nil {
+	host := os.Getenv("POD_IP")
+	if host == "" {
+		host = "localhost"
+	}
+	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("%s:%d", host, port)); err != nil {
 		panic(err)
 	}
 	defer registry.Deregister(ctx, instanceID, serviceName)
@@ -63,7 +67,7 @@ func main() {
 	svc := controller.New(ratingGateway, metadataGateway)
 	h := grpchandler.New(svc)
 
-	lis, err := net.Listen("tcp", "localhost:8083")
+	lis, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", port))
 	if err != nil {
 		panic(err)
 	}

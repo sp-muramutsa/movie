@@ -1,11 +1,10 @@
 module movieexample.com
 
-go 1.25.7
+go 1.25.0
 
 require (
 	github.com/IBM/sarama v1.47.0
-	github.com/confluentinc/confluent-kafka-go v1.9.2
-	github.com/hashicorp/consul/api v1.33.4
+	github.com/hashicorp/consul/api v1.28.2
 	github.com/lib/pq v1.11.2
 	google.golang.org/grpc v1.64.0
 	google.golang.org/protobuf v1.36.11
@@ -18,7 +17,6 @@ require (
 	github.com/eapache/go-resiliency v1.7.0 // indirect
 	github.com/eapache/queue v1.1.0 // indirect
 	github.com/fatih/color v1.16.0 // indirect
-	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-hclog v1.5.0 // indirect
@@ -37,8 +35,10 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
+	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pierrec/lz4/v4 v4.1.25 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20250401214520-65e299d6c5c9 // indirect
+	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	golang.org/x/crypto v0.48.0 // indirect
 	golang.org/x/exp v0.0.0-20250808145144-a408d31f581a // indirect
 	golang.org/x/net v0.51.0 // indirect
