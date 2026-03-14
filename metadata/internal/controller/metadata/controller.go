@@ -19,11 +19,11 @@ type metadataRepository interface {
 
 // Controller defines a metadata service controller.
 type Controller struct {
-	repo metadataRepository
+	repo  metadataRepository
 	cache metadataRepository
 }
 
-// New createds a metadata service controller.
+// New creates a metadata service controller.
 func New(repo metadataRepository, cache metadataRepository) *Controller {
 	return &Controller{repo, cache}
 }
@@ -48,4 +48,9 @@ func (c *Controller) Get(ctx context.Context, id string) (*model.Metadata, error
 
 	return repoData, err
 
+}
+
+// Put writes movie metadata to repository.
+func (c *Controller) Put(ctx context.Context, m *model.Metadata) error {
+	return c.repo.Put(ctx, m.ID, m)
 }

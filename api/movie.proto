@@ -58,13 +58,13 @@ message PutRatingResponse {
 }
 
 service MovieService {
-    rpc GetMovieService(GetMovieServiceRequest) returns (GetMovieServiceResponse);
+    rpc GetMovieDetails(GetMovieDetailsRequest) returns (GetMovieDetailsResponse);
 }
 
-message GetMovieServiceRequest {
+message GetMovieDetailsRequest {
     string movie_id = 1;
 }
 
-message GetMovieServiceResponse {
+message GetMovieDetailsResponse {
     MovieDetails movie_details = 1;
 }

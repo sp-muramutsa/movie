@@ -299,14 +299,14 @@ var RatingService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	MovieService_GetMovieService_FullMethodName = "/MovieService/GetMovieService"
+	MovieService_GetMovieDetails_FullMethodName = "/MovieService/GetMovieDetails"
 )
 
 // MovieServiceClient is the client API for MovieService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MovieServiceClient interface {
-	GetMovieService(ctx context.Context, in *GetMovieServiceRequest, opts ...grpc.CallOption) (*GetMovieServiceResponse, error)
+	GetMovieDetails(ctx context.Context, in *GetMovieDetailsRequest, opts ...grpc.CallOption) (*GetMovieDetailsResponse, error)
 }
 
 type movieServiceClient struct {
@@ -317,10 +317,10 @@ func NewMovieServiceClient(cc grpc.ClientConnInterface) MovieServiceClient {
 	return &movieServiceClient{cc}
 }
 
-func (c *movieServiceClient) GetMovieService(ctx context.Context, in *GetMovieServiceRequest, opts ...grpc.CallOption) (*GetMovieServiceResponse, error) {
+func (c *movieServiceClient) GetMovieDetails(ctx context.Context, in *GetMovieDetailsRequest, opts ...grpc.CallOption) (*GetMovieDetailsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetMovieServiceResponse)
-	err := c.cc.Invoke(ctx, MovieService_GetMovieService_FullMethodName, in, out, cOpts...)
+	out := new(GetMovieDetailsResponse)
+	err := c.cc.Invoke(ctx, MovieService_GetMovieDetails_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -331,7 +331,7 @@ func (c *movieServiceClient) GetMovieService(ctx context.Context, in *GetMovieSe
 // All implementations must embed UnimplementedMovieServiceServer
 // for forward compatibility.
 type MovieServiceServer interface {
-	GetMovieService(context.Context, *GetMovieServiceRequest) (*GetMovieServiceResponse, error)
+	GetMovieDetails(context.Context, *GetMovieDetailsRequest) (*GetMovieDetailsResponse, error)
 	mustEmbedUnimplementedMovieServiceServer()
 }
 
@@ -342,8 +342,8 @@ type MovieServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedMovieServiceServer struct{}
 
-func (UnimplementedMovieServiceServer) GetMovieService(context.Context, *GetMovieServiceRequest) (*GetMovieServiceResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method GetMovieService not implemented")
+func (UnimplementedMovieServiceServer) GetMovieDetails(context.Context, *GetMovieDetailsRequest) (*GetMovieDetailsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetMovieDetails not implemented")
 }
 func (UnimplementedMovieServiceServer) mustEmbedUnimplementedMovieServiceServer() {}
 func (UnimplementedMovieServiceServer) testEmbeddedByValue()                      {}
@@ -366,20 +366,20 @@ func RegisterMovieServiceServer(s grpc.ServiceRegistrar, srv MovieServiceServer)
 	s.RegisterService(&MovieService_ServiceDesc, srv)
 }
 
-func _MovieService_GetMovieService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetMovieServiceRequest)
+func _MovieService_GetMovieDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMovieDetailsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MovieServiceServer).GetMovieService(ctx, in)
+		return srv.(MovieServiceServer).GetMovieDetails(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MovieService_GetMovieService_FullMethodName,
+		FullMethod: MovieService_GetMovieDetails_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MovieServiceServer).GetMovieService(ctx, req.(*GetMovieServiceRequest))
+		return srv.(MovieServiceServer).GetMovieDetails(ctx, req.(*GetMovieDetailsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -392,8 +392,8 @@ var MovieService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MovieServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetMovieService",
-			Handler:    _MovieService_GetMovieService_Handler,
+			MethodName: "GetMovieDetails",
+			Handler:    _MovieService_GetMovieDetails_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

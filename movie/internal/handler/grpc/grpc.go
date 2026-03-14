@@ -23,7 +23,7 @@ func New(ctrl *movie.Controller) *Handler {
 }
 
 // GetMovieDetails returns moviie details by id.
-func (h *Handler) GetMovieDetails(ctx context.Context, req *gen.GetMovieServiceRequest) (*gen.GetMovieServiceResponse, error) {
+func (h *Handler) GetMovieDetails(ctx context.Context, req *gen.GetMovieDetailsRequest) (*gen.GetMovieDetailsResponse, error) {
 	if req == nil || req.MovieId == "" {
 		return nil, status.Errorf(codes.InvalidArgument, "nil req or empty id")
 	}
@@ -33,10 +33,14 @@ func (h *Handler) GetMovieDetails(ctx context.Context, req *gen.GetMovieServiceR
 	} else if err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
-	return &gen.GetMovieServiceResponse{
+	rating := 0.0
+	if m.Rating != nil {
+		rating = *m.Rating
+	}
+	return &gen.GetMovieDetailsResponse{
 		MovieDetails: &gen.MovieDetails{
 			Metadata: model.MetadataToProto(&m.Metadata),
-			Rating:   *m.Rating,
+			Rating:   rating,
 		},
 	}, nil
 }

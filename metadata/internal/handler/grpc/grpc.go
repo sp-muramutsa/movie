@@ -23,7 +23,7 @@ func New(ctrl *metadata.Controller) *Handler {
 }
 
 // GetMetadataByID returns a movie metadata by id.
-func (h *Handler) GetMetadataByID(ctx context.Context, req *gen.GetMetadataRequest) (*gen.GetMetadataResponse, error) {
+func (h *Handler) GetMetadata(ctx context.Context, req *gen.GetMetadataRequest) (*gen.GetMetadataResponse, error) {
 	if req == nil || req.MovieId == "" {
 		return nil, status.Errorf(codes.InvalidArgument, "nil or empty id")
 	}
@@ -36,4 +36,15 @@ func (h *Handler) GetMetadataByID(ctx context.Context, req *gen.GetMetadataReque
 	}
 
 	return &gen.GetMetadataResponse{Metadata: model.MetadataToProto(m)}, nil
+}
+
+// PutMetadata puts movie metadata to repository.
+func (h *Handler) PutMetadata(ctx context.Context, req *gen.PutMetadataRequest) (*gen.PutMetadataResponse, error) {
+	if req == nil || req.Metadata == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "nil req or metadata")
+	}
+	if err := h.svc.Put(ctx, model.ProtoToMetadata(req.Metadata)); err != nil {
+		return nil, status.Errorf(codes.Internal, err.Error())
+	}
+	return &gen.PutMetadataResponse{}, nil
 }

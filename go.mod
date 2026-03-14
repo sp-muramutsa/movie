@@ -4,8 +4,11 @@ go 1.25.0
 
 require (
 	github.com/IBM/sarama v1.47.0
+	github.com/golang/mock v1.6.0
+	github.com/google/go-cmp v0.7.0
 	github.com/hashicorp/consul/api v1.28.2
 	github.com/lib/pq v1.11.2
+	github.com/stretchr/testify v1.11.1
 	google.golang.org/grpc v1.64.0
 	google.golang.org/protobuf v1.36.11
 	gopkg.in/yaml.v3 v3.0.1
@@ -37,6 +40,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pierrec/lz4/v4 v4.1.25 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20250401214520-65e299d6c5c9 // indirect
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	golang.org/x/crypto v0.48.0 // indirect

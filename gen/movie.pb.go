@@ -509,27 +509,27 @@ func (*PutRatingResponse) Descriptor() ([]byte, []int) {
 	return file_movie_proto_rawDescGZIP(), []int{9}
 }
 
-type GetMovieServiceRequest struct {
+type GetMovieDetailsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	MovieId       string                 `protobuf:"bytes,1,opt,name=movie_id,json=movieId,proto3" json:"movie_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetMovieServiceRequest) Reset() {
-	*x = GetMovieServiceRequest{}
+func (x *GetMovieDetailsRequest) Reset() {
+	*x = GetMovieDetailsRequest{}
 	mi := &file_movie_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetMovieServiceRequest) String() string {
+func (x *GetMovieDetailsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetMovieServiceRequest) ProtoMessage() {}
+func (*GetMovieDetailsRequest) ProtoMessage() {}
 
-func (x *GetMovieServiceRequest) ProtoReflect() protoreflect.Message {
+func (x *GetMovieDetailsRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_movie_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -541,39 +541,39 @@ func (x *GetMovieServiceRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetMovieServiceRequest.ProtoReflect.Descriptor instead.
-func (*GetMovieServiceRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetMovieDetailsRequest.ProtoReflect.Descriptor instead.
+func (*GetMovieDetailsRequest) Descriptor() ([]byte, []int) {
 	return file_movie_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *GetMovieServiceRequest) GetMovieId() string {
+func (x *GetMovieDetailsRequest) GetMovieId() string {
 	if x != nil {
 		return x.MovieId
 	}
 	return ""
 }
 
-type GetMovieServiceResponse struct {
+type GetMovieDetailsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	MovieDetails  *MovieDetails          `protobuf:"bytes,1,opt,name=movie_details,json=movieDetails,proto3" json:"movie_details,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetMovieServiceResponse) Reset() {
-	*x = GetMovieServiceResponse{}
+func (x *GetMovieDetailsResponse) Reset() {
+	*x = GetMovieDetailsResponse{}
 	mi := &file_movie_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetMovieServiceResponse) String() string {
+func (x *GetMovieDetailsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetMovieServiceResponse) ProtoMessage() {}
+func (*GetMovieDetailsResponse) ProtoMessage() {}
 
-func (x *GetMovieServiceResponse) ProtoReflect() protoreflect.Message {
+func (x *GetMovieDetailsResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_movie_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -585,12 +585,12 @@ func (x *GetMovieServiceResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetMovieServiceResponse.ProtoReflect.Descriptor instead.
-func (*GetMovieServiceResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetMovieDetailsResponse.ProtoReflect.Descriptor instead.
+func (*GetMovieDetailsResponse) Descriptor() ([]byte, []int) {
 	return file_movie_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *GetMovieServiceResponse) GetMovieDetails() *MovieDetails {
+func (x *GetMovieDetailsResponse) GetMovieDetails() *MovieDetails {
 	if x != nil {
 		return x.MovieDetails
 	}
@@ -630,9 +630,9 @@ const file_movie_proto_rawDesc = "" +
 	"recordType\x12!\n" +
 	"\frating_value\x18\x04 \x01(\x05R\vratingValue\"\x13\n" +
 	"\x11PutRatingResponse\"3\n" +
-	"\x16GetMovieServiceRequest\x12\x19\n" +
+	"\x16GetMovieDetailsRequest\x12\x19\n" +
 	"\bmovie_id\x18\x01 \x01(\tR\amovieId\"M\n" +
-	"\x17GetMovieServiceResponse\x122\n" +
+	"\x17GetMovieDetailsResponse\x122\n" +
 	"\rmovie_details\x18\x01 \x01(\v2\r.MovieDetailsR\fmovieDetails2\x85\x01\n" +
 	"\x0fMetadataService\x128\n" +
 	"\vGetMetadata\x12\x13.GetMetadataRequest\x1a\x14.GetMetadataResponse\x128\n" +
@@ -641,7 +641,7 @@ const file_movie_proto_rawDesc = "" +
 	"\x13GetAggregatedRating\x12\x1b.GetAggregatedRatingRequest\x1a\x1c.GetAggregatedRatingResponse\x122\n" +
 	"\tPutRating\x12\x11.PutRatingRequest\x1a\x12.PutRatingResponse2T\n" +
 	"\fMovieService\x12D\n" +
-	"\x0fGetMovieService\x12\x17.GetMovieServiceRequest\x1a\x18.GetMovieServiceResponseB\x06Z\x04/genb\x06proto3"
+	"\x0fGetMovieDetails\x12\x17.GetMovieDetailsRequest\x1a\x18.GetMovieDetailsResponseB\x06Z\x04/genb\x06proto3"
 
 var (
 	file_movie_proto_rawDescOnce sync.Once
@@ -667,24 +667,24 @@ var file_movie_proto_goTypes = []any{
 	(*GetAggregatedRatingResponse)(nil), // 7: GetAggregatedRatingResponse
 	(*PutRatingRequest)(nil),            // 8: PutRatingRequest
 	(*PutRatingResponse)(nil),           // 9: PutRatingResponse
-	(*GetMovieServiceRequest)(nil),      // 10: GetMovieServiceRequest
-	(*GetMovieServiceResponse)(nil),     // 11: GetMovieServiceResponse
+	(*GetMovieDetailsRequest)(nil),      // 10: GetMovieDetailsRequest
+	(*GetMovieDetailsResponse)(nil),     // 11: GetMovieDetailsResponse
 }
 var file_movie_proto_depIdxs = []int32{
 	0,  // 0: MovieDetails.metadata:type_name -> Metadata
 	0,  // 1: GetMetadataResponse.metadata:type_name -> Metadata
 	0,  // 2: PutMetadataRequest.metadata:type_name -> Metadata
-	1,  // 3: GetMovieServiceResponse.movie_details:type_name -> MovieDetails
+	1,  // 3: GetMovieDetailsResponse.movie_details:type_name -> MovieDetails
 	2,  // 4: MetadataService.GetMetadata:input_type -> GetMetadataRequest
 	4,  // 5: MetadataService.PutMetadata:input_type -> PutMetadataRequest
 	6,  // 6: RatingService.GetAggregatedRating:input_type -> GetAggregatedRatingRequest
 	8,  // 7: RatingService.PutRating:input_type -> PutRatingRequest
-	10, // 8: MovieService.GetMovieService:input_type -> GetMovieServiceRequest
+	10, // 8: MovieService.GetMovieDetails:input_type -> GetMovieDetailsRequest
 	3,  // 9: MetadataService.GetMetadata:output_type -> GetMetadataResponse
 	5,  // 10: MetadataService.PutMetadata:output_type -> PutMetadataResponse
 	7,  // 11: RatingService.GetAggregatedRating:output_type -> GetAggregatedRatingResponse
 	9,  // 12: RatingService.PutRating:output_type -> PutRatingResponse
-	11, // 13: MovieService.GetMovieService:output_type -> GetMovieServiceResponse
+	11, // 13: MovieService.GetMovieDetails:output_type -> GetMovieDetailsResponse
 	9,  // [9:14] is the sub-list for method output_type
 	4,  // [4:9] is the sub-list for method input_type
 	4,  // [4:4] is the sub-list for extension type_name

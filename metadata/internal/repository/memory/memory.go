@@ -12,7 +12,7 @@ import (
 type Repository struct {
 	sync.RWMutex
 	data map[string]*model.Metadata
-} 
+}
 
 // New creates a new memory Repository
 func New() *Repository {
@@ -30,11 +30,10 @@ func (r *Repository) Get(_ context.Context, id string) (*model.Metadata, error) 
 	return m, nil
 }
 
-// Puts a movie metadata in the repository
+// Puts a movie metadata in the repository.
 func (r *Repository) Put(_ context.Context, id string, metadata *model.Metadata) error {
 	r.Lock()
 	defer r.Unlock()
 	r.data[id] = metadata
 	return nil
 }
-

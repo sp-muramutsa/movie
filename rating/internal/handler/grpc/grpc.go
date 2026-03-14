@@ -18,11 +18,11 @@ type Handler struct {
 	svc *rating.Controller
 }
 
-// New creates a new rating gRPC hadler.
 // New creates a new rating gRPC handler.
 func New(ctrl *rating.Controller) *Handler {
 	return &Handler{svc: ctrl}
 }
+
 // GetAggregatedRating returns the aggregated rating for a record.
 func (h *Handler) GetAggregatedRating(ctx context.Context, req *gen.GetAggregatedRatingRequest) (*gen.GetAggregatedRatingResponse, error) {
 	if req == nil || req.RecordId == "" || req.RecordType == "" {
@@ -48,6 +48,6 @@ func (h *Handler) PutRating(ctx context.Context, req *gen.PutRatingRequest) (*ge
 	if err := h.svc.PutRating(ctx, model.RecordID(req.RecordId), model.RecordType(req.RecordType), &model.Rating{UserID: model.UserID(req.UserId), Value: model.RatingValue(req.RatingValue)}); err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
-	
-	return &gen.PutRatingResponse{}, nil 
+
+	return &gen.PutRatingResponse{}, nil
 }
