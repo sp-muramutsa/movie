@@ -4,6 +4,7 @@ go 1.25.0
 
 require (
 	github.com/IBM/sarama v1.47.0
+	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/golang/mock v1.6.0
 	github.com/google/go-cmp v0.7.0
 	github.com/hashicorp/consul/api v1.28.2
