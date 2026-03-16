@@ -3,6 +3,7 @@ package grpc
 import (
 	"context"
 
+	"google.golang.org/grpc/credentials/insecure"
 	"movieexample.com/gen"
 	"movieexample.com/internal/grpcutil"
 	"movieexample.com/pkg/discovery"
@@ -22,7 +23,7 @@ func New(registry discovery.Registry) *Gateway {
 // GetAggregatedRating returns the aggregated rating for a
 // record or ErrNotFound if there are no ratings for it.
 func (g *Gateway) GetAggregatedRating(ctx context.Context, recordID model.RecordID, recordType model.RecordType) (float64, error) {
-	conn, err := grpcutil.ServiceConnection(ctx, "rating", g.registry)
+	conn, err := grpcutil.ServiceConnection(ctx, "rating", g.registry, insecure.NewCredentials())
 	if err != nil {
 		return 0, err
 	}

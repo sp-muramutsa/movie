@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: movie
-          image: movie:latest
-          imagePullPolicy: IfNotPresent
+          image: movie:v2
+          imagePullPolicy: Never
           ports:
             - containerPort: 8083
           env:

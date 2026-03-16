@@ -30,7 +30,7 @@ func (h *Handler) GetMetadata(ctx context.Context, req *gen.GetMetadataRequest) 
 
 	m, err := h.svc.Get(ctx, req.MovieId)
 	if err != nil && errors.Is(err, metadata.ErrNotFound) {
-		return nil, status.Errorf(codes.NotFound, err.Error())
+		return nil, status.Errorf(codes.NotFound, "movie with id %s not found", req.MovieId)
 	} else if err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}

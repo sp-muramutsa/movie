@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"log"
 	"net"
@@ -9,6 +11,7 @@ import (
 	"time"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"gopkg.in/yaml.v3"
 	"movieexample.com/gen"
 	controller "movieexample.com/movie/internal/controller/movie"
@@ -22,7 +25,7 @@ import (
 const serviceName = "movie"
 
 func main() {
-	log.Println("Starting the movie service")
+	log.Println("Starting the movie service with TLS enabled")
 
 	f, err := os.Open("../configs/default.yaml")
 	if err != nil {
@@ -62,7 +65,27 @@ func main() {
 		}
 	}()
 
-	metadataGateway := metadatagateway.New(registry)
+	certBytes, err := os.ReadFile("../configs/server.cert")
+	if err != nil {
+		log.Fatalf("Failed to read server certificate: %v", err)
+	}
+
+	certPool := x509.NewCertPool()
+	if !certPool.AppendCertsFromPEM(certBytes) {
+		log.Fatalf("Failed to append certificate to pool: %v", err)
+	}
+
+	cert, err := tls.LoadX509KeyPair("../configs/server.cert", "../configs/server.key")
+	if err != nil {
+		log.Fatalf("Failed to load server certificate: %v", err)
+	}
+
+	creds := credentials.NewTLS(&tls.Config{
+		Certificates:       []tls.Certificate{cert},
+		InsecureSkipVerify: true,
+	})
+
+	metadataGateway := metadatagateway.New(registry, creds)
 	ratingGateway := ratinggateway.New(registry)
 	svc := controller.New(ratingGateway, metadataGateway)
 	h := grpchandler.New(svc)
@@ -72,7 +95,7 @@ func main() {
 		panic(err)
 	}
 
-	srv := grpc.NewServer()
+	srv := grpc.NewServer(grpc.Creds(creds))
 	gen.RegisterMovieServiceServer(srv, h)
 	if err := srv.Serve(lis); err != nil {
 		panic(err)

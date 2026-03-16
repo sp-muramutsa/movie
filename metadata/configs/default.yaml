@@ -1,5 +1,10 @@
 api:
   port: 8081
+postgres:
+  user: "postgres"
+  password: "Password@123"
+  host: "postgres"
+  dbname: "movieapp"
 serviceDiscovery:
   consul:
     address: consul:8500

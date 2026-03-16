@@ -14,7 +14,12 @@ spec:
     spec:
       containers:
       - name: metadata
-        image: metadata:latest
-        imagePullPolicy: IfNotPresent
+        image: metadata:v3
+        imagePullPolicy: Never
         ports:
           - containerPort: 8081
+        env:
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP

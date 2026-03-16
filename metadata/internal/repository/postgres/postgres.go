@@ -11,11 +11,11 @@ import (
 )
 
 const (
-	host = "postgres"
-	port = 5432
-	user = "postgres"
+	host    = "postgres"
+	port    = 5432
+	user    = "postgres"
 	password = "Password@123"
-	dbname = "movieapp"
+	dbname  = "movieapp"
 	sslmode = "disable"
 )
 

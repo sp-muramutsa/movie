@@ -1,8 +1,16 @@
-package main 
+package main
 
 type config struct {
-	API apiConfig `yaml:"api"`
+	API              apiConfig              `yaml:"api"`
+	Postgres         PostgresConfig         `yaml:"postgres"`
 	ServiceDiscovery serviceDiscoveryConfig `yaml:"serviceDiscovery"`
+}
+
+type PostgresConfig struct {
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
+	Host     string `yaml:"host"`
+	DBName   string `yaml:"dbname"`
 }
 
 type apiConfig struct {
