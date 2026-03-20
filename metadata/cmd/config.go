@@ -4,6 +4,7 @@ type config struct {
 	API              apiConfig              `yaml:"api"`
 	Postgres         PostgresConfig         `yaml:"postgres"`
 	ServiceDiscovery serviceDiscoveryConfig `yaml:"serviceDiscovery"`
+	Jaeger           jaegerConfig           `yaml:"jaeger"`
 }
 
 type PostgresConfig struct {
@@ -23,4 +24,8 @@ type serviceDiscoveryConfig struct {
 
 type consulConfig struct {
 	Address string `yaml:"address"`
+}
+
+type jaegerConfig struct {
+	URL string `yaml:"url"`
 }

@@ -1,13 +1,13 @@
 FROM golang:1.25-alpine AS builder
 WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
 COPY . .
-ENV GOOS=linux
-ENV GOARCH=amd64
 RUN go build -o main ./movie/cmd
 
 FROM alpine:latest
 WORKDIR /app
-COPY --from=builder app/main ./
+COPY --from=builder /app/main ./
 COPY movie/configs/default.yaml ../configs/default.yaml
 COPY movie/configs/server.cert ../configs/server.cert
 COPY movie/configs/server.key ../configs/server.key

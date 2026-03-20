@@ -6,14 +6,22 @@ import (
 	"log"
 	"net"
 	"os"
+	"os/signal"
+	"sync"
+	"syscall"
 	"time"
 
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"gopkg.in/yaml.v3"
 	"movieexample.com/gen"
 	"movieexample.com/pkg/discovery"
 	"movieexample.com/pkg/discovery/consul"
+	"movieexample.com/pkg/tracing"
 	controller "movieexample.com/rating/internal/controller/rating"
 	grpchandler "movieexample.com/rating/internal/handler/grpc"
 	"movieexample.com/rating/internal/ingester/kafka"
@@ -23,7 +31,9 @@ import (
 const serviceName = "rating"
 
 func main() {
-	log.Println("Starting the rating service")
+
+	logger, _ := zap.NewProduction()
+	logger.Info("Started the service", zap.String("serviceName", serviceName))
 
 	f, err := os.Open("../configs/default.yaml")
 	if err != nil {
@@ -36,6 +46,28 @@ func main() {
 		panic(err)
 	}
 
+	tp, err := tracing.NewJaegerProvider(cfg.Jaeger.URL, serviceName)
+	if err != nil {
+		logger.Fatal("Failed to initialize jaeger provider", zap.Error(err))
+	}
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			logger.Fatal("Failed to shutdown jaeger provider", zap.Error(err))
+		}
+	}()
+	otel.SetTracerProvider(tp)
+	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
+
+	// startup test span - temporary debug to verify Jaeger exporter connectivity
+	{
+		ctx := context.Background()
+		tr := otel.Tracer(serviceName)
+		_, span := tr.Start(ctx, "startup-test-span")
+		span.End()
+		// give the batcher a short moment to export the span
+		time.Sleep(2 * time.Second)
+	}
+
 	repo, err := postgres.New()
 	if err != nil {
 		panic(err)
@@ -46,7 +78,8 @@ func main() {
 		panic(err)
 	}
 
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+
 	instanceID := discovery.GenerateInstanceID(serviceName)
 	host := os.Getenv("POD_IP")
 	if host == "" {
@@ -84,10 +117,39 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	srv := grpc.NewServer()
+
+	srv := grpc.NewServer(grpc.StatsHandler(otelgrpc.NewServerHandler()))
+
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		s := <-sigChan
+		cancel()
+		log.Printf("Received signal %v. Attempting graceful shutdown", s)
+		srv.GracefulStop()
+		log.Println("Graceful shutdown complete")
+	}()
+
 	gen.RegisterRatingServiceServer(srv, h)
 	reflection.Register(srv)
-	if err := srv.Serve(lis); err != nil {
-		panic(err)
+
+	go func() {
+		if err := srv.Serve(lis); err != nil && err != grpc.ErrServerStopped {
+			log.Fatalf("failed to serve: %v", err)
+		}
+	}()
+
+	wg.Wait()
+}
+
+// ValidCredentials verifies the user credentials.
+func ValidCredentials(username, password string) bool {
+	if username == "" || password == "" {
+		return false
 	}
+	return true
 }

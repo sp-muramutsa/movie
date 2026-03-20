@@ -11,7 +11,8 @@ import (
 
 // NewTestMovieGRPCServer creates a new movie gRPC server to be used in tests.
 func NewTestMovieGRPCServer(registry discovery.Registry) gen.MovieServiceServer {
-	metadataGateway := metadatagateway.New(registry)
+	// pass nil TransportCredentials for tests (production code passes real creds)
+	metadataGateway := metadatagateway.New(registry, nil)
 	ratingGateway := ratinggateway.New(registry)
 	ctrl := movie.New(ratingGateway, metadataGateway)
 	return grpchandler.New(ctrl)

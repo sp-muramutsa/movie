@@ -7,16 +7,16 @@ import (
 	"fmt"
 
 	_ "github.com/lib/pq"
-	"movieexample.com/rating/pkg"
+	model "movieexample.com/rating/pkg"
 )
 
 const (
-	host = "postgres"
-	port = 5432
-	user = "postgres"
+	host     = "postgres"
+	port     = 5432
+	user     = "postgres"
 	password = "Password@123"
-	dbname = "movieapp"
-	sslmode = "disable"
+	dbname   = "movieapp"
+	sslmode  = "disable"
 )
 
 // Repository defines a Postgres-based rating repository.

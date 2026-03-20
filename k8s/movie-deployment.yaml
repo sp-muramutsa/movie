@@ -19,6 +19,8 @@ spec:
           ports:
             - containerPort: 8083
           env:
+            - name: JAEGER_AGENT_HOST
+              value: "jaeger"
             - name: POD_IP
               valueFrom:
                 fieldRef:

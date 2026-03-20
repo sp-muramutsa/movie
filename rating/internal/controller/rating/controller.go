@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 
-	"movieexample.com/rating/internal/repository/memory"
 	model "movieexample.com/rating/pkg"
 )
 
@@ -32,9 +31,10 @@ func New(repo ratingRepository, ingester ratingIngester) *Controller {
 // record or ErrNotFound if there are no ratings for it.
 func (c *Controller) GetAggregatedRating(ctx context.Context, recordID model.RecordID, recordType model.RecordType) (float64, error) {
 	ratings, err := c.repo.Get(ctx, recordID, recordType)
-	if err != nil && errors.Is(memory.ErrNotFound, err) {
-		return 0, ErrNotFound
-	} else if err != nil {
+	if err != nil {
+		return 0, err
+	}
+	if len(ratings) == 0 {
 		return 0, ErrNotFound
 	}
 

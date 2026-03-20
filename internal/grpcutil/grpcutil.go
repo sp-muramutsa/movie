@@ -4,6 +4,7 @@ import (
 	"context"
 	"math/rand"
 
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"movieexample.com/pkg/discovery"
@@ -20,5 +21,10 @@ func ServiceConnection(
 	if err != nil {
 		return nil, err
 	}
-	return grpc.DialContext(ctx, addrs[rand.Intn(len(addrs))], grpc.WithTransportCredentials(creds))
+	return grpc.DialContext(
+		ctx,
+		addrs[rand.Intn(len(addrs))],
+		grpc.WithTransportCredentials(creds),
+		grpc.WithStatsHandler(otelgrpc.NewClientHandler()),
+	)
 }

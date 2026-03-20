@@ -7,7 +7,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"movieexample.com/gen"
-	"movieexample.com/rating/internal/controller/rating"
 	controller "movieexample.com/rating/internal/controller/rating"
 	model "movieexample.com/rating/pkg"
 )
@@ -15,11 +14,11 @@ import (
 // Handler defines a gRPC rating API handler.
 type Handler struct {
 	gen.UnimplementedRatingServiceServer
-	svc *rating.Controller
+	svc *controller.Controller
 }
 
 // New creates a new rating gRPC handler.
-func New(ctrl *rating.Controller) *Handler {
+func New(ctrl *controller.Controller) *Handler {
 	return &Handler{svc: ctrl}
 }
 

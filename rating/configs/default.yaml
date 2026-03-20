@@ -5,3 +5,5 @@ serviceDiscovery:
     address: consul:8500
   kafka:
     address: kafka:9092
+jaeger:
+  url: http://jaeger:14268/api/traces
