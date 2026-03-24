@@ -1,6 +1,7 @@
 package testutil
 
 import (
+	"github.com/uber-go/tally/v4"
 	"movieexample.com/gen"
 	"movieexample.com/metadata/internal/controller/metadata"
 	grpchandler "movieexample.com/metadata/internal/handler/grpc"
@@ -12,5 +13,5 @@ func NewTestMetadataGRPCServer() gen.MetadataServiceServer {
 	repo := memory.New()
 	cache := memory.New()
 	ctrl := metadata.New(repo, cache)
-	return grpchandler.New(ctrl)
+	return grpchandler.New(ctrl, tally.NoopScope)
 }

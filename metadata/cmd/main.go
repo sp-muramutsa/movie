@@ -106,7 +106,6 @@ func main() {
 	counter.Inc(1)
 
 	// Repository configuration.
-
 	repo, err := postgres.New()
 	if err != nil {
 		log.Fatalf("failed to connect to postgres: %v", err)
@@ -114,7 +113,7 @@ func main() {
 
 	cache := memory.New()
 	svc := metadata.New(repo, cache)
-	h := grpchandler.New(svc)
+	h := grpchandler.New(svc, scope)
 
 	cert, err := tls.LoadX509KeyPair("../configs/server.cert", "../configs/server.key")
 	if err != nil {
@@ -133,6 +132,7 @@ func main() {
 	if host == "" {
 		host = "localhost"
 	}
+
 	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("%s:%d", host, cfg.API.Port)); err != nil {
 		panic(err)
 	}

@@ -11,7 +11,6 @@ require (
 	github.com/hashicorp/consul/api v1.28.2
 	github.com/lib/pq v1.11.2
 	github.com/stretchr/testify v1.11.1
-	github.com/uber-go/tally v5.0.0+incompatible
 	github.com/uber-go/tally/v4 v4.1.17
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.67.0
 	go.opentelemetry.io/otel v1.42.0
@@ -51,9 +50,6 @@ require (
 	github.com/jcmturner/gokrb5/v8 v8.4.4 // indirect
 	github.com/jcmturner/rpc/v2 v2.0.3 // indirect
 	github.com/klauspost/compress v1.18.4 // indirect
-	github.com/m3db/prometheus_client_golang v1.12.8 // indirect
-	github.com/m3db/prometheus_client_model v0.2.1 // indirect
-	github.com/m3db/prometheus_common v0.34.6 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect

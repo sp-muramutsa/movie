@@ -5,25 +5,23 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/uber-go/tally"
-	"github.com/uber-go/tally/prometheus"
 	"google.golang.org/protobuf/proto"
 	"movieexample.com/gen"
 	model "movieexample.com/metadata/pkg/model"
 )
 
-var metadata = &model.Metadata {
-	ID:				"123",
-	Title:			"Some random movie",
-	Description:	"Sequel to part 1",
-	Director:		"Chris Nolan",
+var metadata = &model.Metadata{
+	ID:          "123",
+	Title:       "Some random movie",
+	Description: "Sequel to part 1",
+	Director:    "Chris Nolan",
 }
 
 var genMetadata = &gen.Metadata{
-	Id: 			"123",
-	Title: 		"Another movie",
-	Description: 	"Sequel of the legendary The Movie",
-	Director: 		"Quentin Tarantino",
+	Id:          "123",
+	Title:       "Another movie",
+	Description: "Sequel of the legendary The Movie",
+	Director:    "Quentin Tarantino",
 }
 
 func main() {
@@ -36,7 +34,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	protoBytes, err := serializeToProto(genMetadata)
 	if err != nil {
 		panic(err)

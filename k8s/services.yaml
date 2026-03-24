@@ -9,8 +9,13 @@ spec:
     app: metadata
   ports:
     - protocol: TCP
+      name: api
       port: 8080
       targetPort: 8081
+    - protocol: TCP
+      name: metrics
+      port: 8091
+      targetPort: 8091
   type: ClusterIP
 
 ---
@@ -26,8 +31,13 @@ spec:
     app: rating
   ports:
     - protocol: TCP
+      name: api
       port: 8082
       targetPort: 8082
+    - protocol: TCP
+      name: metrics
+      port: 8091
+      targetPort: 8091
   type: ClusterIP
 
 ---
@@ -43,6 +53,11 @@ spec:
     app: movie
   ports:
     - protocol: TCP
+      name: api
       port: 8081
       targetPort: 8081
+    - protocol: TCP
+      name: metrics
+      port: 8091
+      targetPort: 8091
   type: ClusterIP
