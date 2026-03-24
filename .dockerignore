@@ -1,0 +1,16 @@
+.git
+*.md
+*.log
+*.env
+node_modules
+testdata
+tmp
+dist
+build
+.DS_Store
+.idea
+.vscode
+coverage*
+docker-compose*
+README*
+LICENSE*

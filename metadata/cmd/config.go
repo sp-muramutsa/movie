@@ -5,6 +5,7 @@ type config struct {
 	Postgres         PostgresConfig         `yaml:"postgres"`
 	ServiceDiscovery serviceDiscoveryConfig `yaml:"serviceDiscovery"`
 	Jaeger           jaegerConfig           `yaml:"jaeger"`
+	Prometheus       prometheusConfig       `yaml:"prometheus"`
 }
 
 type PostgresConfig struct {
@@ -28,4 +29,8 @@ type consulConfig struct {
 
 type jaegerConfig struct {
 	URL string `yaml:"url"`
+}
+
+type prometheusConfig struct {
+	MetricsPort int `yaml:"metricsPort"`
 }

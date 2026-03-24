@@ -1,0 +1,27 @@
+apiVersion: skaffold/v4beta1
+kind: Config
+metadata:
+  name: movieapp
+build:
+  local:
+    push: false
+    useDockerCLI: false
+    useBuildkit: false
+  artifacts:
+    - image: metadata
+      context: .
+      docker:
+        dockerfile: metadata/Dockerfile
+    - image: movie
+      context: .
+      docker:
+        dockerfile: movie/Dockerfile
+    - image: rating
+      context: .
+      docker:
+        dockerfile: rating/Dockerfile
+manifests:
+  rawYaml:
+    - k8s/*.yaml
+deploy:
+  kubectl: {}

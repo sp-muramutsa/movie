@@ -25,3 +25,22 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: metadata
+  namespace: default
+spec:
+  selector:
+    app: metadata
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8081
+    - name: metrics
+      protocol: TCP
+      port: 8091
+      targetPort: 8091
+  type: ClusterIP

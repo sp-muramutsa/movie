@@ -4,7 +4,8 @@ import (
 	"context"
 	"log"
 	"net"
-"github.com/google/go-cmp/cmp"
+
+	"github.com/google/go-cmp/cmp"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/testing/protocmp"

@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	
+
+	"github.com/uber-go/tally"
+	"github.com/uber-go/tally/prometheus"
 	"google.golang.org/protobuf/proto"
 	"movieexample.com/gen"
 	model "movieexample.com/metadata/pkg/model"

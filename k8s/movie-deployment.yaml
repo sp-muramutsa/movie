@@ -18,6 +18,7 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 8083
+            - containerPort: 8091
           env:
             - name: JAEGER_AGENT_HOST
               value: "jaeger"
@@ -25,3 +26,22 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: movie
+  namespace: default
+spec:
+  selector:
+    app: movie
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8081
+      targetPort: 8083
+    - name: metrics
+      protocol: TCP
+      port: 8091
+      targetPort: 8091
+  type: ClusterIP

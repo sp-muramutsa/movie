@@ -6,9 +6,12 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"net/http"
 	"os"
 	"time"
 
+	"github.com/uber-go/tally/v4"
+	"github.com/uber-go/tally/v4/prometheus"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
@@ -33,17 +36,25 @@ func main() {
 	logger, _ := zap.NewProduction()
 	logger.Info("Started the service", zap.String("serviceName", serviceName))
 
-	f, err := os.Open("../configs/default.yaml")
+	var f *os.File
+	var err error
+	for _, path := range []string{"../configs/default.yaml", "/configs/default.yaml", "configs/default.yaml"} {
+		f, err = os.Open(path)
+		if err == nil {
+			break
+		}
+	}
 	if err != nil {
-		panic(err)
+		logger.Fatal("Failed to open configuration", zap.Error(err))
 	}
 	defer f.Close()
 
 	var cfg config
 	if err := yaml.NewDecoder(f).Decode(&cfg); err != nil {
-		panic(err)
+		logger.Fatal("Failed to parse configuration", zap.Error(err))
 	}
 
+	// Tracing with Jaeger .
 	tp, err := tracing.NewJaegerProvider(cfg.Jaeger.URL, serviceName)
 	if err != nil {
 		logger.Fatal("Failed to initialize jaeger provider", zap.Error(err))
@@ -56,15 +67,45 @@ func main() {
 	otel.SetTracerProvider(tp)
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 
-	// startup test span - temporary debug to verify Jaeger exporter connectivity
+	// startup test span - temporary debug to verify Jaeger exporter connectivity.
 	{
 		ctx := context.Background()
 		tr := otel.Tracer(serviceName)
 		_, span := tr.Start(ctx, "startup-test-span")
 		span.End()
-		// give the batcher a short moment to export the span
 		time.Sleep(2 * time.Second)
 	}
+
+	// Alerting with Prometheus.
+	reporter := prometheus.NewReporter(prometheus.Options{})
+	scope, closer := tally.NewRootScope(tally.ScopeOptions{
+		Tags:            map[string]string{"service": serviceName},
+		CachedReporter:  reporter,
+		SanitizeOptions: &prometheus.DefaultSanitizerOpts,
+	}, 10*time.Second)
+	defer closer.Close()
+
+	metricsMux := http.NewServeMux()
+	metricsMux.Handle("/metrics", reporter.HTTPHandler())
+	metricsPort := cfg.Prometheus.MetricsPort
+	if metricsPort == 0 {
+		metricsPort = 8091 // Fallback if missing from YAML
+	}
+	go func() {
+		err := http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", metricsPort), metricsMux)
+		if err != nil {
+			log.Printf("[METRICS] Failed to start metrics handler on port %d: %v", metricsPort, err)
+		} else {
+			log.Printf("[METRICS] Metrics handler exited cleanly (unexpected)")
+		}
+	}()
+
+	counter := scope.Tagged(map[string]string{
+		"service": serviceName,
+	}).Counter("service_started")
+	counter.Inc(1)
+
+	// Repository configuration.
 
 	repo, err := postgres.New()
 	if err != nil {
@@ -81,7 +122,7 @@ func main() {
 	}
 	creds := credentials.NewTLS(&tls.Config{Certificates: []tls.Certificate{cert}})
 
-	// Service Discovery
+	// Service Discovery: Consul or Localhost
 	ctx := context.Background()
 	registry, err := consul.NewRegistry(cfg.ServiceDiscovery.Consul.Address)
 	if err != nil {
@@ -106,6 +147,7 @@ func main() {
 		}
 	}()
 
+	// Starting gRPC server.
 	lis, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", cfg.API.Port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

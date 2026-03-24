@@ -2,13 +2,20 @@ FROM golang:1.25-alpine AS builder
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
-COPY . .
+COPY rating ./rating
+COPY pkg ./pkg
+COPY api ./api
+COPY gen ./gen
+COPY internal ./internal
+COPY metadata ./metadata
+ENV CGO_ENABLED=0
 ENV GOOS=linux
-ENV GOARCH=amd64
-RUN go build -o main ./rating/cmd
+ENV TALLY_PROMETHEUS_SANITIZE_NAME=true
+RUN go build -trimpath -ldflags="-s -w" -o main ./rating/cmd
 
 FROM alpine:latest
 WORKDIR /app
+ENV TALLY_PROMETHEUS_SANITIZE_NAME=true
 COPY --from=builder /app/main ./
 COPY rating/configs/default.yaml ../configs/default.yaml
 RUN chmod +x ./main

@@ -1,0 +1,48 @@
+# Service for metadata
+apiVersion: v1
+kind: Service
+metadata:
+  name: metadata
+  namespace: default
+spec:
+  selector:
+    app: metadata
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8081
+  type: ClusterIP
+
+---
+
+# Service for rating
+apiVersion: v1
+kind: Service
+metadata:
+  name: rating
+  namespace: default
+spec:
+  selector:
+    app: rating
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082
+  type: ClusterIP
+
+---
+
+# Service for movie
+apiVersion: v1
+kind: Service
+metadata:
+  name: movie
+  namespace: default
+spec:
+  selector:
+    app: movie
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+  type: ClusterIP
